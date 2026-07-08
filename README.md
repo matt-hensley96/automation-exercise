@@ -135,6 +135,9 @@ In CI, both are uploaded as a single `test-results` artifact on every run (pass 
 - Reviewed every generated file and ensured I understood / agreed with the implementation
 - Reviewed selectors, assertions and page object structure against the task requirements
 - Executed the test suite locally and verified that all tests passed
-- Executed the test suite via CI/CD (Github Actions) and then identified/fixed an issue where the screenshots were not displaying property in the HTML test report
-- Identified/fixed an issue where a test was failing due to an overlayed ad
+- Executed the test suite via CI/CD (Github Actions)
+- Identified/fixed the following issues in separate git commits:
+  - Screenshots were not displaying property in the HTML test report
+  - A checkout test was failing due to an overlayed advertisement
+  - Environment variables set via the command line were not being applied
 - Wrote and added this README file
