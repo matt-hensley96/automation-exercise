@@ -33,7 +33,21 @@ public abstract class PageTestBase : IAsyncLifetime
             ViewportSize = new ViewportSize { Width = 1440, Height = 900 }
         });
         Context.SetDefaultTimeout(Settings.TimeoutMs);
+        await Context.RouteAsync("**/*", BlockAdRequestsAsync);
         Page = await Context.NewPageAsync();
+    }
+
+    private static Task BlockAdRequestsAsync(IRoute route)
+    {
+        var url = route.Request.Url;
+        var isAdRequest = url.Contains("doubleclick.net")
+            || url.Contains("googlesyndication.com")
+            || url.Contains("adservice.google.com")
+            || url.Contains("googleadservices.com")
+            || url.Contains("google.com/pagead")
+            || url.Contains("fundingchoicesmessages.google.com");
+
+        return isAdRequest ? route.AbortAsync() : route.ContinueAsync();
     }
 
     public async Task DisposeAsync()
