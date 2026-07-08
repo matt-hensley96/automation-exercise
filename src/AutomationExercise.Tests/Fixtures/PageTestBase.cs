@@ -66,10 +66,11 @@ public abstract class PageTestBase : IAsyncLifetime
         try
         {
             var fileName = $"{GetType().Name}.{testName}.{DateTime.UtcNow:yyyyMMddHHmmss}.png";
-            var path = Path.Combine(AppContext.BaseDirectory, "TestResults", "Screenshots", fileName);
-            Directory.CreateDirectory(Path.GetDirectoryName(path)!);
-            await Page.ScreenshotAsync(new PageScreenshotOptions { Path = path, FullPage = true });
-            return path;
+            var absolutePath = Path.Combine(AppContext.BaseDirectory, "TestResults", "Screenshots", fileName);
+            Directory.CreateDirectory(Path.GetDirectoryName(absolutePath)!);
+            await Page.ScreenshotAsync(new PageScreenshotOptions { Path = absolutePath, FullPage = true });
+
+            return Path.Combine("Screenshots", fileName).Replace(Path.DirectorySeparatorChar, '/');
         }
         catch
         {
