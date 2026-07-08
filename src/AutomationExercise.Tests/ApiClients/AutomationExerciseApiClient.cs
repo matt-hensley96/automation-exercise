@@ -3,10 +3,8 @@ using AutomationExercise.Tests.Helpers;
 
 namespace AutomationExercise.Tests.ApiClients;
 
-// Thin wrapper over automationexercise.com's REST API. All POST/PUT/DELETE bodies are
-// form-urlencoded (not JSON) - confirmed against the live API. The API also always answers
-// with transport HTTP 200, embedding the real status in a "responseCode" JSON field (see
-// ApiResult), so every call here parses the body rather than trusting HttpResponseMessage.StatusCode.
+// Thin wrapper over automationexercise.com's REST API. 
+// All POST/PUT/DELETE bodies are form-urlencoded (not JSON)
 public class AutomationExerciseApiClient : IDisposable
 {
     private readonly HttpClient _httpClient;
@@ -47,11 +45,15 @@ public class AutomationExerciseApiClient : IDisposable
     public Task<ApiResult> CreateAccountAsync(AccountInfo account)
         => SendAsync(new HttpRequestMessage(HttpMethod.Post, "/api/createAccount") { Content = ToFormContent(account) });
 
+    public Task<ApiResult> GetCreateAccountAsync() => SendAsync(new HttpRequestMessage(HttpMethod.Get, "/api/createAccount"));
+
     public Task<ApiResult> DeleteAccountAsync(string email, string password)
         => SendAsync(new HttpRequestMessage(HttpMethod.Delete, "/api/deleteAccount")
         {
             Content = new FormUrlEncodedContent(new Dictionary<string, string> { ["email"] = email, ["password"] = password })
         });
+
+    public Task<ApiResult> GetDeleteAccountAsync() => SendAsync(new HttpRequestMessage(HttpMethod.Get, "/api/deleteAccount"));
 
     public Task<ApiResult> GetUserDetailByEmailAsync(string email)
         => SendAsync(new HttpRequestMessage(HttpMethod.Get, $"/api/getUserDetailByEmail?email={Uri.EscapeDataString(email)}"));
@@ -84,6 +86,9 @@ public class AutomationExerciseApiClient : IDisposable
 
         using var json = JsonDocument.Parse(body);
         var root = json.RootElement;
+
+        // The API mostly responds with HTTP 200, embedding the real status in a "responseCode" JSON field
+        // So here we parse the body first rather than trusting the HttpResponseMessage.StatusCode.
         return new ApiResult
         {
             ResponseCode = root.TryGetProperty("responseCode", out var code) ? code.GetInt32() : (int)response.StatusCode,

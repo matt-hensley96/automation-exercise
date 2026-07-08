@@ -6,10 +6,7 @@ using FluentAssertions;
 
 namespace AutomationExercise.Tests.Tests;
 
-// Pure REST API coverage against automationexercise.com/api_list - no browser involved. Every
-// assertion here checks ApiResult.ResponseCode, not the HTTP transport status: this API always
-// answers HTTP 200 and encodes the real status inside the JSON body (confirmed live - see
-// ApiResult's doc comment for the exact evidence).
+// Pure REST API coverage against automationexercise.com/api_list
 public class ApiTests : ApiTestBase
 {
     public ApiTests(TestRunFixture fixture) : base(fixture)
@@ -103,6 +100,28 @@ public class ApiTests : ApiTestBase
             {
                 await apiClient.DeleteAccountAsync(user.Email, user.Password);
             }
+        });
+
+    [Fact]
+    public async Task GetCreateAccount_MethodNotSupported_ReturnsTransport405()
+        => await RunStepAsync(async () =>
+        {
+            using var apiClient = new AutomationExerciseApiClient(Settings.ApiBaseUrl);
+            var result = await apiClient.GetCreateAccountAsync();
+
+            // Unlike every other endpoint above, this 405 comes from the real HTTP transport
+            // status, not a "responseCode" field in the JSON body - there is no such field here.
+            result.ResponseCode.Should().Be(405);
+        });
+
+    [Fact]
+    public async Task GetDeleteAccount_MethodNotSupported_ReturnsTransport405()
+        => await RunStepAsync(async () =>
+        {
+            using var apiClient = new AutomationExerciseApiClient(Settings.ApiBaseUrl);
+            var result = await apiClient.GetDeleteAccountAsync();
+
+            result.ResponseCode.Should().Be(405);
         });
 
     [Fact]
