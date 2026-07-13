@@ -34,7 +34,7 @@ Other options were:
 - **.NET 8 SDK** -  If not installed, either download from
   [dotnet.microsoft.com](https://dotnet.microsoft.com/download) or run the following install
   script:
-  ```bash
+  ```powershell
   curl -sSL https://dot.net/v1/dotnet-install.sh -o dotnet-install.sh
   chmod +x dotnet-install.sh
   ./dotnet-install.sh --channel 8.0 --install-dir "$HOME/.dotnet"
@@ -67,11 +67,7 @@ Other options were:
 Every value can be overridden with an environment variable, using the standard
 `Microsoft.Extensions.Configuration` double-underscore convention (`TESTSETTINGS__<Key>`).
 
-This allows values to be set when executing the tests via the command line (or CI/CD), e.g.
-
-```bash
-TESTSETTINGS__Headless=false dotnet test   # run tests while watching browser instead of running headless
-```
+This allows values to be set when executing the tests via the command line (or CI/CD).
 
 ## Running the full suite
 
@@ -81,15 +77,15 @@ This builds the project, installs the Chromium browser Playwright needs, and run
 
 A full run takes roughly 2 minutes.
 
-```bash
+```powershell
 dotnet restore
 
 dotnet build
 
 pwsh src/AutomationExercise.Tests/bin/Debug/net8.0/playwright.ps1 install --with-deps chromium
 
-$env:TESTSETTINGS__Headless = "false"
-$env:TESTSETTINGS__SlowMo = "500"
+$env:TESTSETTINGS__Headless = "false" # optional
+$env:TESTSETTINGS__SlowMo = "500" # optional
 
 dotnet test
 ```
@@ -112,13 +108,13 @@ In CI, both are uploaded as a single `test-results` artifact on every run (pass 
   - checkout
   - pay
   - confirm order
-  - logout. 
+  - logout
 - **`Tests/AccountManagementTests.cs`** - negative cases: login with wrong password, login with
   a nonexistent email, signup with an already-registered email.
 - **`Tests/ProductSearchTests.cs`** - error states: empty search term, search term with no
   matches.
 - **`Tests/CartTests.cs`** - boundary values (quantity 0, quantity 9999) and negative cases
-  (guest checkout gate, invalid subscribe email format).
+  (guest checkout forced to log in, invalid subscribe email format).
 - **`Tests/ApiTests.cs`** - REST API coverage: products/brands list (success + method-not-allowed),
   search (success + missing-parameter), login verification (success/missing-field/not-found/
   method-not-allowed), and a full create -> read -> delete account lifecycle.

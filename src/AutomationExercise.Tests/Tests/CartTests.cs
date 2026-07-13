@@ -12,13 +12,13 @@ public class CartTests : PageTestBase
 
     // Confirmed against the live site: the quantity input carries a "min=1" HTML attribute,
     // but the server does not enforce it - quantity 0 is silently accepted and added to the
-    // cart as a Rs. 0 line item. This test pins that gap as a known, observed behavior.
+    // cart as a 0 rupees line item. This test pins that gap as a known, observed behavior.
     [Fact]
     public async Task AddToCart_WithZeroQuantity_IsAcceptedWithZeroTotal()
         => await RunStepAsync(async () =>
         {
             var productDetailsPage = new ProductDetailsPage(Page);
-            await productDetailsPage.GotoAsync(1); // Blue Top, Rs. 500
+            await productDetailsPage.GotoAsync(1); // Blue Top, 500 rupees
             await productDetailsPage.SetQuantityAsync(0);
             await productDetailsPage.AddToCartAsync();
             await productDetailsPage.ViewCartFromModalAsync();
@@ -35,7 +35,7 @@ public class CartTests : PageTestBase
         => await RunStepAsync(async () =>
         {
             var productDetailsPage = new ProductDetailsPage(Page);
-            await productDetailsPage.GotoAsync(3); // Sleeveless Dress, Rs. 1000
+            await productDetailsPage.GotoAsync(3); // Sleeveless Dress, 1000 rupees
             await productDetailsPage.SetQuantityAsync(9999);
             await productDetailsPage.AddToCartAsync();
             await productDetailsPage.ViewCartFromModalAsync();
