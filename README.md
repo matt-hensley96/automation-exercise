@@ -69,6 +69,16 @@ Every value can be overridden with an environment variable, using the standard
 
 This allows values to be set when executing the tests via the command line (or CI/CD).
 
+### GitHub issue-on-failure
+
+Every failing CI test opens a GitHub issue (labelled `test-failure`), via
+`Helpers/GitHubIssueReporter.cs`. The issue title is the test name and the body contains the
+exception and (for UI tests) the failure screenshot path.
+
+`GH_ISSUE_TOKEN` is set in `ci.yml` from GitHub's own per-run `GITHUB_TOKEN` (via the
+`issues: write` permission on the workflow) - that token is scoped to this repo and expires with
+the run, so no PAT or repo secret needs to be created.
+
 ## Running the full suite
 
 From the repository root, run the commands below.

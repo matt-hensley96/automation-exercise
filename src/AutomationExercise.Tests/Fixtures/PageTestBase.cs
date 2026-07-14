@@ -71,6 +71,7 @@ public abstract class PageTestBase : IAsyncLifetime
             {
                 extentTest.AddScreenCaptureFromPath(screenshotPath);
             }
+            await GitHubIssueReporter.ReportFailureAsync($"{GetType().Name}.{testName}", ex.ToString(), screenshotPath);
             throw; // re-throw so xUnit's own failure reporting (stack trace, assertion message) is untouched
         }
     }

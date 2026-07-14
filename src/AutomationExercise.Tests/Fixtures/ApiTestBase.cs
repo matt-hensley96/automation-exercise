@@ -30,6 +30,7 @@ public abstract class ApiTestBase
         catch (Exception ex)
         {
             extentTest.Fail(ex.Message);
+            await GitHubIssueReporter.ReportFailureAsync($"{GetType().Name}.{testName}", ex.ToString());
             throw;
         }
     }

@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [main]
 
+permissions:
+  contents: read
+  issues: write
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -30,6 +34,8 @@ jobs:
 
       - name: Run tests
         run: dotnet test --no-build --configuration Debug
+        env:
+          GH_ISSUE_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload test report and screenshots
         if: always()
