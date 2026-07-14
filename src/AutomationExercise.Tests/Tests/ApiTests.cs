@@ -20,7 +20,7 @@ public class ApiTests : ApiTestBase
             using var apiClient = new AutomationExerciseApiClient(Settings.ApiBaseUrl);
             var result = await apiClient.GetProductsListAsync();
 
-            result.ResponseCode.Should().Be(201);
+            result.ResponseCode.Should().Be(200);
             using var json = JsonDocument.Parse(result.RawBody);
             json.RootElement.GetProperty("products").GetArrayLength().Should().BeGreaterThan(0);
         });

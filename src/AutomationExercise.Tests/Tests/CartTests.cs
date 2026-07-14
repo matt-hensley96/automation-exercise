@@ -25,7 +25,7 @@ public class CartTests : PageTestBase
 
             var cartPage = new CartPage(Page);
             (await cartPage.GetQuantityForProductAsync(1)).Should().Be("0");
-            (await cartPage.GetTotalPriceForProductAsync(1)).Should().Be("Rs. 500");
+            (await cartPage.GetTotalPriceForProductAsync(1)).Should().Be("Rs. 0");
         });
 
     // Confirmed against the live site: there is no upper bound either - a very large quantity
