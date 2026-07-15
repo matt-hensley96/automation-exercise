@@ -147,3 +147,4 @@ In CI, both are uploaded as a single `test-results` artifact on every run (pass 
   - A checkout test was failing due to an overlayed advertisement
   - Environment variables set via the command line were not being applied
 - Wrote and added this README file
+- Added functionality to automatically raise Github Issues when CI pipeline fails
